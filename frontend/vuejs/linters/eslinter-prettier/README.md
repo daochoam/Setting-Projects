@@ -44,7 +44,3 @@ Create a `.prettierrc` file in the root of your project and add the following co
 - `npm run lint`: Lint files.
 - `npm run lint:fix`: Lint and fix files.
 - `npm run format`: Format code using Prettier.
-
-```
-
-```
