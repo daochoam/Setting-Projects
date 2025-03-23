@@ -1,18 +1,20 @@
 import { SESSION_NOT_COOKIE } from '@/const/const'
 import router from '@/router'
-import { useAuthStore } from '@/stores/authStore'
 import instance from './axios'
 
 instance.interceptors.request.use(
   async (config) => {
-    const authStore = useAuthStore()
+    // Obtener datos de autenticación desde sessionStorage
+    const authData = JSON.parse(sessionStorage.getItem('auth') || '{}')
+    const authenticated = authData?.authenticated
+    const token = authData?.token
     const pathName = router.currentRoute.value.path
 
-    if (pathName !== SESSION_NOT_COOKIE && !authStore.authenticated) {
+    if (pathName !== SESSION_NOT_COOKIE && !authenticated) {
       router.push(SESSION_NOT_COOKIE)
     }
-    if (authStore.authenticated) {
-      config.headers.Authorization = `Bearer ${authStore.token}`
+    if (authenticated) {
+      config.headers.Authorization = `Bearer ${token}`
     }
     return config
   },

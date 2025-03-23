@@ -1,8 +1,8 @@
-import { URL_DNP_BACK } from '@/const/const'
+import { URL_BACK } from '@/const/const'
 import axios from 'axios'
 
 const instance = axios.create({
-  baseURL: URL_DNP_BACK,
+  baseURL: URL_BACK,
   headers: {
     Accept: 'application/json',
     'Content-Type': 'application/json',
