@@ -1,0 +1,23 @@
+version: '3'
+services:
+  keycloak:
+    image: quay.io/keycloak/keycloak:latest
+    container_name: keycloak
+    ports:
+      - 8080:8080
+      - 8443:8443
+    restart: unless-stopped
+    environment:
+      # Credentials for admin account
+      # -----------------------------
+      KEYCLOAK_USER: 'admin'
+      KEYCLOAK_PASSWORD: 'admin'
+
+      # Credentials for storing into an external database
+      # -------------------------------------------------
+      DB_VENDOR: 'mssql'
+      DB_ADDR: '172.18.49.41'
+      DB_PORT: '1433'
+      DB_DATABASE: 'front-development'
+      DB_USER: 'sa'
+      DB_PASSWORD: '1!Kp9S<E8E£a'
