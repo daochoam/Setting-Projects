@@ -7,7 +7,7 @@ This is a Vue.js project.
 Run the following command to install ESLint and related dependencies:
 
 ```bash
-npm install eslint prettier globals eslint-plugin-vue @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-config-prettier eslint-plugin-prettier eslint-plugin-css-modules --save-dev
+npm install --save-dev eslint prettier globals eslint-plugin-vue @typescript-eslint/parser @typescript-eslint/eslint-plugin eslint-config-prettier eslint-plugin-prettier eslint-plugin-css-modules 
 ```
 
 ## Scripts
