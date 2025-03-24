@@ -1,20 +1,24 @@
-import babelParser from '@babel/eslint-parser'
-import pkg from '@eslint/js'
+import eslintPlugin from '@eslint/js'
+import tsPlugin from '@typescript-eslint/eslint-plugin'
+import tsParser from '@typescript-eslint/parser'
 import prettierPlugin from 'eslint-plugin-prettier'
 import vuePlugin from 'eslint-plugin-vue'
 import globals from 'globals'
 import vueParser from 'vue-eslint-parser'
 
-const { configs: jsConfigs } = pkg
+const { configs: jsConfigs } = eslintPlugin
 
 export default [
+  // Configuración para js
   {
     files: ['src/**/*.{js,mjs,cjs}'],
     ignores: [
       'node_modules/',
       'public/',
-      'package-lock.json',
-      'package.json',
+      'dist/',
+      'build/',
+      'coverage/',
+      '.gitignore',
       '*.config.js',
       '*.config.cjs',
       '*.config.mjs'
@@ -24,20 +28,51 @@ export default [
         ...globals.browser,
         ...globals.node
       },
-      parser: babelParser,
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
-        requireConfigFile: false
+        project: './tsconfig.eslint.json'
       }
     },
     rules: {
       ...jsConfigs.recommended.rules,
-      'no-unused-vars': 'off',
+      'no-undef': 'warn',
+      'no-unused-vars': 'warn',
+      'css-modules/no-undef-class': 'warn',
+      'css-modules/no-undef-property': 'warn',
       'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'warn',
       'no-console': process.env.NODE_ENV === 'production' ? 'error' : 'warn'
     }
   },
+  // Configuración para TypeScript
+  {
+    files: ['src/**/*.{ts,tsx}'],
+    languageOptions: {
+      globals: {
+        ...globals.browser,
+        ...globals.node
+      },
+      parser: tsParser,
+      parserOptions: {
+        ecmaVersion: 2020,
+        sourceType: 'module',
+        project: './tsconfig.json',
+        project: './tsconfig.eslint.json'
+      }
+    },
+    plugins: {
+      '@typescript-eslint': tsPlugin,
+      prettier: prettierPlugin
+    },
+    rules: {
+      ...tsPlugin.configs.recommended.rules,
+      ...prettierPlugin.configs.recommended.rules,
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'error'
+    }
+  },
+  // Configuración para Vue con TypeScript
   {
     files: ['**/*.vue'],
     languageOptions: {
@@ -49,45 +84,53 @@ export default [
       parserOptions: {
         ecmaVersion: 2020,
         sourceType: 'module',
-        parser: babelParser,
-        requireConfigFile: false
+        parser: tsParser,
+        extraFileExtensions: ['.vue']
       }
     },
     plugins: {
       vue: vuePlugin,
-      prettier: prettierPlugin
+      prettier: prettierPlugin,
+      '@typescript-eslint': tsPlugin
     },
     rules: {
       ...vuePlugin.configs['essential'].rules,
       ...prettierPlugin.configs.recommended.rules,
-      'no-inline-comments': 'error',
+      'prettier/prettier': 'error',
+      '@typescript-eslint/no-unused-vars': 'warn',
+
+      'vue/block-order': [
+        'error',
+        {
+          order: ['docs', 'template', 'script[setup]', 'style[scoped]']
+        }
+      ],
       'vue/max-attributes-per-line': [
         'error',
         {
-          singleline: 4, // Max 4 attribute per line for single-line elements
+          singleline: 4,
           multiline: {
-            max: 1 // Max 1 attribute per line for multi-line elements
+            max: 4
           }
         }
       ],
-      // Enforce a specific order for attributes in Vue components
       'vue/attributes-order': [
         'error',
         {
           order: [
-            'GLOBAL', // id
-            'DEFINITION', // is
-            'LIST_RENDERING', // v-for
-            'CONDITIONALS', // v-if, v-else-if, v-else, v-show, v-cloak
-            ['UNIQUE', 'SLOT'], // ref, key, v-slot
-            'TWO_WAY_BINDING', // v-model
-            'OTHER_ATTR', // props, class, style
-            'OTHER_DIRECTIVES', // Other directives not covered above
-            'RENDER_MODIFIERS', // v-once, v-pre, v-memo
-            'CONTENT', // v-text, v-html
-            'EVENTS' // v-on or @
+            'GLOBAL',
+            'DEFINITION',
+            'LIST_RENDERING',
+            'CONDITIONALS',
+            ['UNIQUE', 'SLOT'],
+            'TWO_WAY_BINDING',
+            'OTHER_ATTR',
+            'OTHER_DIRECTIVES',
+            'RENDER_MODIFIERS',
+            'CONTENT',
+            'EVENTS'
           ],
-          alphabetical: false // Optional: disable alphabetical sorting within groups
+          alphabetical: false
         }
       ],
       'vue/order-in-components': [

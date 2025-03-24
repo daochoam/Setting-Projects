@@ -7,7 +7,7 @@ This is a Vue.js project.
 Run the following command to install ESLint and related dependencies:
 
 ```bash
-npm install globals eslint globals prettier eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue @babel/core @babel/eslint-parser @babel/preset-env @eslint/js @vue/cli-plugin-babel --save-dev
+npm install eslint prettier globals eslint-config-prettier eslint-plugin-prettier eslint-plugin-vue eslint-plugin-css-modules  @babel/core @babel/eslint-parser @babel/preset-env @eslint/js @vue/cli-plugin-babel --save-dev
 ```
 
 ## Scripts
@@ -37,6 +37,20 @@ Create a `.prettierrc` file in the root of your project and add the following co
   "htmlWhitespaceSensitivity": "ignore",
   "vueIndentScriptAndStyle": true
 }
+```
+
+Create a `.prettierignore` file in the root of your project and add the following content:
+
+```
+node_modules
+dist
+public
+coverage
+.env
+.env.local
+.env.test.local
+.env.development.local
+.env.production.local
 ```
 
 ## Usage
